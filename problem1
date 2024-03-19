@@ -1,0 +1,25 @@
+def replace_chars(string, char1, char2):
+    """
+    Replace every occurrence of char1 with char2 in the given string.
+    
+    Parameters:
+        string (str): The input string.
+        char1 (str): The character to be replaced.
+        char2 (str): The character to replace with.
+        
+    Returns:
+        str: The modified string with replacements.
+    """
+    return string.replace(char1, char2)
+
+# Program to test the function
+def main():
+    input_string = input("Enter a string (no spaces): ")
+    char1 = input("Enter the character to replace: ")
+    char2 = input("Enter the replacement character: ")
+    
+    result = replace_chars(input_string, char1, char2)
+    print("Result:", result)
+
+if __name__ == "__main__":
+    main()
