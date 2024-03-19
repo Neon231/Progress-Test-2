@@ -1,0 +1,99 @@
+import csv
+import os
+
+class Employee:
+    def __init__(self, code, name, salary, allowance):
+        self.code = code
+        self.name = name
+        self.salary = salary
+        self.allowance = allowance
+
+def read_data_from_file(filename):
+    employees = []
+    if os.path.exists(filename):
+        with open(filename, 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                code, name, salary, allowance = row
+                employees.append(Employee(code, name, float(salary), float(allowance)))
+    return employees
+
+def write_data_to_file(employees, filename):
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        for employee in employees:
+            writer.writerow([employee.code, employee.name, employee.salary, employee.allowance])
+
+def add_employee(employees, filename):
+    code = input("Enter employee code: ")
+    name = input("Enter employee name: ")
+    salary = float(input("Enter employee salary: "))
+    allowance = float(input("Enter employee allowance: "))
+    employees.append(Employee(code, name, salary, allowance))
+    write_data_to_file(employees, filename)
+    print("Employee added successfully!")
+
+def binary_search(employees, name):
+    low = 0
+    high = len(employees) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if employees[mid].name == name:
+            return employees[mid]
+        elif employees[mid].name < name:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return None
+
+def remove_employee(employees, code, filename):
+    for employee in employees:
+        if employee.code == code:
+            employees.remove(employee)
+            write_data_to_file(employees, filename)
+            print("Employee removed successfully!")
+            return
+    print("Employee not found!")
+
+def print_descending_order(employees):
+    sorted_employees = sorted(employees, key=lambda x: x.salary + x.allowance, reverse=True)
+    for employee in sorted_employees:
+        print(f"Code: {employee.code}, Name: {employee.name}, Salary: {employee.salary}, Allowance: {employee.allowance}")
+
+def main():
+    filename = "input.txt"
+    employees = read_data_from_file(filename)
+    
+    while True:
+        print("\nMenu:")
+        print("1. Add new employee")
+        print("2. Find employee by name")
+        print("3. Remove employee by code")
+        print("4. Print employees in descending order of salary + allowance")
+        print("5. Exit")
+        
+        choice = input("Enter your choice: ")
+        
+        if choice == '1':
+            add_employee(employees, filename)
+        elif choice == '2':
+            name = input("Enter employee name to search: ")
+            employee = binary_search(employees, name)
+            if employee:
+                print("Employee found:")
+                print(f"Code: {employee.code}, Name: {employee.name}, Salary: {employee.salary}, Allowance: {employee.allowance}")
+            else:
+                print("Employee not found!")
+        elif choice == '3':
+            code = input("Enter employee code to remove: ")
+            remove_employee(employees, code, filename)
+        elif choice == '4':
+            print("Employees in descending order of salary + allowance:")
+            print_descending_order(employees)
+        elif choice == '5':
+            break
+        else:
+            print("Invalid choice! Please enter a valid option.")
+
+if __name__ == "__main__":
+    main()
